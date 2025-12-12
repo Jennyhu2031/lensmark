@@ -1,0 +1,8 @@
+{
+  "name": "Lensmark",
+  "description": "Capture landmarks like a pro with guided shots, pose tips, and photo spots.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}

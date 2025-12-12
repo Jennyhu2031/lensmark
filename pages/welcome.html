@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lensmark - Welcome</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <style>
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      body { margin: 0; min-height: 100vh; background-color: #10221d; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: '#13ecb6',
+              'background-light': '#f6f8f8',
+              'background-dark': '#10221d',
+            },
+            fontFamily: {
+              display: ['Plus Jakarta Sans', 'sans-serif'],
+            },
+            borderRadius: {
+              DEFAULT: '0.25rem',
+              lg: '0.5rem',
+              xl: '0.75rem',
+              '2xl': '1rem',
+              full: '9999px',
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-display bg-background-light dark:bg-background-dark text-stone-900 dark:text-white">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden font-display">
+      <div class="@container">
+        <div class="@[480px]:px-0 @[480px]:py-0">
+          <div class="bg-cover bg-center flex flex-col justify-end overflow-hidden min-h-[440px]" style="background-image: linear-gradient(0deg, rgba(16, 34, 29, 1) 0%, rgba(16, 34, 29, 0) 40%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBMVSyG69l4BGJHKlKodH9yhWwxC4ZBOKY8MNGPowyZysf8KAsjon2p8Mcq_tzXDTmxSOo1iTkZlM8ql1kuCSx89Y4QibV28ubsJaZ0L9E0TdfHrHXAqB9HHiTnHHm_kpiMIG8XK8Q95z1tCDQwbkmbpaDf4V5ujiRLxAH7mTQJB9vwmbjypKgNWM2_sDTa08hp8kp5AVTrQMVbXaq2B5u5YfU51l24N50LBNxRTewVdc1GsSU6OiNdvRW5dWZBB-OCW0biR5mNbR1p');">
+            <div class="flex p-6">
+              <p class="text-white tracking-light text-[28px] font-bold leading-tight">Lensmark</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-grow flex flex-col justify-between p-4 space-y-6">
+        <div class="space-y-6">
+          <div class="text-center">
+            <h1 class="text-slate-900 dark:text-white tracking-tight text-3xl font-extrabold leading-tight pb-3">
+              Capture Landmarks Like a Pro
+            </h1>
+            <p class="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal">
+              Discover the best photo spots, get expert tips, and shoot stunning photos at any point of interest.
+            </p>
+          </div>
+          <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3">
+            <div class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#1C2724] p-4 flex-col items-center">
+              <span class="material-symbols-outlined text-slate-700 dark:text-white">map</span>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Find Photo Spots</h2>
+                <p class="text-slate-500 dark:text-[#9db9b2] text-sm font-normal leading-normal">Discover the best angles</p>
+              </div>
+            </div>
+            <div class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#1C2724] p-4 flex-col items-center">
+              <span class="material-symbols-outlined text-slate-700 dark:text-white">photo_camera</span>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Guided Shots</h2>
+                <p class="text-slate-500 dark:text-[#9db9b2] text-sm font-normal leading-normal">Tips for the perfect shot</p>
+              </div>
+            </div>
+            <div class="flex flex-1 gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-[#1C2724] p-4 flex-col items-center">
+              <span class="material-symbols-outlined text-slate-700 dark:text-white">auto_awesome</span>
+              <div class="flex flex-col gap-1">
+                <h2 class="text-slate-900 dark:text-white text-base font-bold leading-tight">Editing Presets</h2>
+                <p class="text-slate-500 dark:text-[#9db9b2] text-sm font-normal leading-normal">One-tap enhancements</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full pt-4">
+          <div class="flex">
+            <a href="explore.html" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-5 flex-1 bg-primary text-[#111816] text-base font-bold leading-normal tracking-[0.015em] transition-transform active:scale-95">
+              <span class="truncate">Get Started</span>
+            </a>
+          </div>
+          <div class="flex justify-center pt-4">
+            <a class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal hover:underline" href="#">
+              Already have an account? Log In
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../js/welcome.js"></script>
+  </body>
+</html>
