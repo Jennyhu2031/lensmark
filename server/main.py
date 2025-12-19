@@ -25,15 +25,20 @@ def init_db():
             password_hash TEXT NOT NULL,
             salt TEXT NOT NULL,
             gender TEXT,
+            avatar TEXT,
             created_at TEXT NOT NULL
         )
         """
     )
-    # Ensure gender column exists if table was created before
+    # Ensure gender and avatar columns exist if table was created before
     try:
         conn.execute("ALTER TABLE users ADD COLUMN gender TEXT")
     except sqlite3.OperationalError:
-        pass # Column already exists
+        pass
+    try:
+        conn.execute("ALTER TABLE users ADD COLUMN avatar TEXT")
+    except sqlite3.OperationalError:
+        pass
     conn.commit()
     conn.close()
 
@@ -47,6 +52,10 @@ class Credentials(BaseModel):
 class GenderUpdate(BaseModel):
     username: str
     gender: str
+
+class AvatarUpdate(BaseModel):
+    username: str
+    avatar_url: str
 
 app = FastAPI()
 
@@ -72,6 +81,7 @@ def root():
             "/api/login",
             "/api/user/{username}",
             "/api/user/update_gender",
+            "/api/user/update_avatar",
             "/favicon.ico"
         ],
     }
@@ -79,12 +89,12 @@ def root():
 @app.get("/api/user/{username}")
 def get_user(username: str):
     conn = get_db()
-    cur = conn.execute("SELECT username, gender FROM users WHERE username = ?", (username,))
+    cur = conn.execute("SELECT username, gender, avatar FROM users WHERE username = ?", (username,))
     row = cur.fetchone()
     conn.close()
     if not row:
         raise HTTPException(status_code=404, detail="User not found")
-    return {"username": row["username"], "gender": row["gender"]}
+    return {"username": row["username"], "gender": row["gender"], "avatar": row["avatar"]}
 
 @app.post("/api/user/update_gender")
 def update_gender(data: GenderUpdate):
@@ -98,6 +108,19 @@ def update_gender(data: GenderUpdate):
     conn.commit()
     conn.close()
     return {"ok": True, "gender": data.gender}
+
+@app.post("/api/user/update_avatar")
+def update_avatar(data: AvatarUpdate):
+    conn = get_db()
+    cur = conn.execute("SELECT username FROM users WHERE username = ?", (data.username,))
+    if not cur.fetchone():
+        conn.close()
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    conn.execute("UPDATE users SET avatar = ? WHERE username = ?", (data.avatar_url, data.username))
+    conn.commit()
+    conn.close()
+    return {"ok": True, "avatar": data.avatar_url}
 
 @app.post("/api/register")
 def register(creds: Credentials):
@@ -120,14 +143,14 @@ def register(creds: Credentials):
     )
     conn.commit()
     conn.close()
-    return {"ok": True, "username": username, "gender": None, "message": "Registered successfully."}
+    return {"ok": True, "username": username, "gender": None, "avatar": None, "message": "Registered successfully."}
 
 @app.post("/api/login")
 def login(creds: Credentials):
     username = creds.username.strip()
     password = creds.password
     conn = get_db()
-    cur = conn.execute("SELECT password_hash, salt, gender FROM users WHERE username = ?", (username,))
+    cur = conn.execute("SELECT password_hash, salt, gender, avatar FROM users WHERE username = ?", (username,))
     row = cur.fetchone()
     conn.close()
     if not row:
@@ -135,10 +158,11 @@ def login(creds: Credentials):
     expected = row["password_hash"]
     salt = row["salt"]
     gender = row["gender"]
+    avatar = row["avatar"]
     if hash_password(password, salt) != expected:
         raise HTTPException(status_code=401, detail="Invalid username or password.")
     token = secrets.token_urlsafe(32)
-    return {"ok": True, "token": token, "username": username, "gender": gender}
+    return {"ok": True, "token": token, "username": username, "gender": gender, "avatar": avatar}
 
 @app.get("/favicon.ico")
 def favicon():

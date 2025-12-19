@@ -12,9 +12,13 @@ const authMsg = document.getElementById('auth-message');
 
 // Profile elements
 const displayUsername = document.getElementById('display-username');
-const displayGender = document.getElementById('display-gender');
-const setGenderBtn = document.getElementById('set-gender-btn');
+const displayGenderText = document.getElementById('display-gender-text');
 const logoutBtn = document.getElementById('logout-btn');
+const profileImg = document.getElementById('profile-img');
+const profileAvatarIcon = document.getElementById('profile-avatar-icon');
+const editAvatarBtn = document.getElementById('edit-avatar-btn');
+const avatarInput = document.getElementById('avatar-input');
+const genderButtons = document.querySelectorAll('.gender-radio');
 
 // Check login status on load
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,7 +32,32 @@ function showProfile(user) {
   authSection.classList.add('hidden');
   profileSection.classList.remove('hidden');
   displayUsername.textContent = user.username;
-  displayGender.textContent = user.gender || 'Not set';
+  displayGenderText.textContent = user.gender || 'Not set';
+  
+  // Update gender buttons state
+  updateGenderButtonsUI(user.gender);
+  
+  // Update avatar
+  if (user.avatar) {
+    profileImg.src = user.avatar;
+    profileImg.classList.remove('hidden');
+    profileAvatarIcon.classList.add('hidden');
+  } else {
+    profileImg.classList.add('hidden');
+    profileAvatarIcon.classList.remove('hidden');
+  }
+}
+
+function updateGenderButtonsUI(gender) {
+  genderButtons.forEach(btn => {
+    if (btn.dataset.gender === gender) {
+      btn.classList.add('bg-primary', 'text-[#111816]', 'border-primary');
+      btn.classList.remove('bg-white/50', 'dark:bg-black/20');
+    } else {
+      btn.classList.remove('bg-primary', 'text-[#111816]', 'border-primary');
+      btn.classList.add('bg-white/50', 'dark:bg-black/20');
+    }
+  });
 }
 
 function showAuth() {
@@ -60,7 +89,7 @@ async function handleAuth(type) {
     const data = await res.json().catch(() => ({}));
 
     if (res.ok) {
-      if (type === 'register') {
+      if (type === 'signup') {
         // Auto login after register
         await handleAuth('login');
       } else {
@@ -79,32 +108,65 @@ async function handleAuth(type) {
 
 loginBtn.addEventListener('click', () => handleAuth('login'));
 signupBtn.addEventListener('click', () => handleAuth('signup'));
-
 logoutBtn.addEventListener('click', showAuth);
 
-setGenderBtn.addEventListener('click', async () => {
-  const currentGender = displayGender.textContent;
-  const newGender = prompt('Enter gender (Male/Female/Other):', currentGender === 'Not set' ? '' : currentGender);
-  
-  if (newGender !== null && newGender.trim() !== '') {
+// Gender Radio Buttons logic
+genderButtons.forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const newGender = btn.dataset.gender;
     const user = JSON.parse(localStorage.getItem('user'));
+    
     try {
       const res = await fetch(`${API_BASE}/api/user/update_gender`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: user.username, gender: newGender.trim() }),
+        body: JSON.stringify({ username: user.username, gender: newGender }),
       });
       
       const data = await res.json();
       if (res.ok) {
         user.gender = data.gender;
         localStorage.setItem('user', JSON.stringify(user));
-        displayGender.textContent = data.gender;
-      } else {
-        alert(data.detail || 'Failed to update gender.');
+        displayGenderText.textContent = data.gender;
+        updateGenderButtonsUI(data.gender);
       }
     } catch (err) {
-      alert('Network error.');
+      console.error('Failed to update gender:', err);
     }
-  }
+  });
+});
+
+// Avatar setting logic
+editAvatarBtn.addEventListener('click', () => avatarInput.click());
+
+avatarInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // In a real app, you'd upload this to a server/S3. 
+  // For this local demo, we'll use a Base64 string to simulate a URL.
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64String = reader.result;
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/user/update_avatar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user.username, avatar_url: base64String }),
+      });
+      
+      if (res.ok) {
+        user.avatar = base64String;
+        localStorage.setItem('user', JSON.stringify(user));
+        profileImg.src = base64String;
+        profileImg.classList.remove('hidden');
+        profileAvatarIcon.classList.add('hidden');
+      }
+    } catch (err) {
+      console.error('Failed to update avatar:', err);
+    }
+  };
+  reader.readAsDataURL(file);
 });

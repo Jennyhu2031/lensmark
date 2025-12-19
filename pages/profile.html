@@ -51,14 +51,6 @@
         <div class="w-12"></div>
       </div>
 
-      <div class="px-4">
-        <div class="w-full min-h-48 bg-cover bg-center rounded-xl shadow-lg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsB8In8vhCTwlrM9KOnNY8BIY9H5iXtc05FzLD0DaD-S8ySKzZoZ9dW_h27aS5hbohCwBKbwm-O5dd-MDeHIOr7kotXlZ2TzCua2PxuyPVayhMDqtSORouOHC_zc0han-7tR5Ubh-3v7yCtzJ1Or5eGTCDRZD8JfhFNZiku3_VU_nJ1rttOmcVd7fRmMsL76-MgTqC1pSW_PttptXQq9yAKk_21QaDReO4SwV7snrwUb6NfRtiOxfYo9LiTaV5hLhbTuQ29QSCLsG9');"></div>
-      </div>
-
-      <div class="px-4 pt-4">
-        <!-- Tabs removed -->
-      </div>
-
       <div id="auth-section" class="p-4 space-y-4">
         <form id="auth-form" class="space-y-3">
           <label class="flex flex-col gap-1">
@@ -84,35 +76,41 @@
       <div id="profile-section" class="p-4 space-y-6 hidden">
         <div class="flex flex-col items-center gap-4">
           <div class="relative">
-            <div class="size-24 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center overflow-hidden border-2 border-primary">
-              <span id="profile-avatar" class="material-symbols-outlined text-5xl text-stone-500">person</span>
+            <div id="avatar-container" class="size-24 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center overflow-hidden border-2 border-primary cursor-pointer">
+              <img id="profile-img" class="hidden size-full object-cover" src="" alt="Avatar" />
+              <span id="profile-avatar-icon" class="material-symbols-outlined text-5xl text-stone-500">person</span>
             </div>
-            <button class="absolute bottom-0 right-0 size-8 rounded-full bg-primary text-[#111816] flex items-center justify-center shadow-lg">
+            <button id="edit-avatar-btn" class="absolute bottom-0 right-0 size-8 rounded-full bg-primary text-[#111816] flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
               <span class="material-symbols-outlined text-sm">edit</span>
             </button>
+            <input type="file" id="avatar-input" class="hidden" accept="image/*" />
           </div>
           <div class="text-center">
             <h3 id="display-username" class="text-2xl font-bold text-stone-900 dark:text-white">Username</h3>
-            <p id="display-gender" class="text-sm text-stone-500 dark:text-stone-400">Not set</p>
+            <p id="display-gender-text" class="text-sm text-stone-500 dark:text-stone-400">Not set</p>
           </div>
         </div>
 
-        <div class="space-y-3">
-          <p class="text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Settings</p>
-          <div class="rounded-xl border border-stone-200 dark:border-stone-800 divide-y divide-stone-200 dark:divide-stone-800 overflow-hidden bg-white/50 dark:bg-black/20">
-            <button id="set-gender-btn" class="flex w-full items-center justify-between p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-              <div class="flex items-center gap-3">
-                <span class="material-symbols-outlined text-stone-500">wc</span>
-                <span class="text-base font-medium">Set Gender</span>
-              </div>
-              <span class="material-symbols-outlined text-stone-400">chevron_right</span>
-            </button>
-            <button id="logout-btn" class="flex w-full items-center justify-between p-4 hover:bg-red-500/10 transition-colors group">
-              <div class="flex items-center gap-3 text-red-500">
-                <span class="material-symbols-outlined">logout</span>
-                <span class="text-base font-medium">Log Out</span>
-              </div>
-            </button>
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <p class="text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Gender</p>
+            <div class="flex gap-2">
+              <button data-gender="Male" class="gender-radio flex-1 py-2 px-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-black/20 text-sm font-medium transition-all hover:bg-primary/10">Male</button>
+              <button data-gender="Female" class="gender-radio flex-1 py-2 px-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-black/20 text-sm font-medium transition-all hover:bg-primary/10">Female</button>
+              <button data-gender="Other" class="gender-radio flex-1 py-2 px-4 rounded-xl border border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-black/20 text-sm font-medium transition-all hover:bg-primary/10">Other</button>
+            </div>
+          </div>
+
+          <div class="space-y-3 pt-2">
+            <p class="text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Account</p>
+            <div class="rounded-xl border border-stone-200 dark:border-stone-800 divide-y divide-stone-200 dark:divide-stone-800 overflow-hidden bg-white/50 dark:bg-black/20">
+              <button id="logout-btn" class="flex w-full items-center justify-between p-4 hover:bg-red-500/10 transition-colors group">
+                <div class="flex items-center gap-3 text-red-500">
+                  <span class="material-symbols-outlined">logout</span>
+                  <span class="text-base font-medium">Log Out</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -135,6 +133,6 @@
       </div>
     </div>
 
-    <script src="../js/profile.js"></script>
+    <script src="../js/profile.js?v=2"></script>
   </body>
 </html>
