@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+ 
+ # Python server artifacts
+ server/__pycache__/
+ server/db.sqlite3

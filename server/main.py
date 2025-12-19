@@ -1,0 +1,107 @@
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import sqlite3
+import hashlib
+import secrets
+from datetime import datetime
+import os
+import base64
+from fastapi.responses import Response
+
+DB_PATH = os.path.join(os.path.dirname(__file__), "db.sqlite3")
+
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    conn = get_db()
+    conn.execute(
+        """
+        CREATE TABLE IF NOT EXISTS users (
+            username TEXT PRIMARY KEY,
+            password_hash TEXT NOT NULL,
+            salt TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+        """
+    )
+    conn.commit()
+    conn.close()
+
+def hash_password(password: str, salt: str) -> str:
+    return hashlib.sha256((salt + password).encode("utf-8")).hexdigest()
+
+class Credentials(BaseModel):
+    username: str
+    password: str
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
+
+@app.get("/")
+def root():
+    return {
+        "ok": True,
+        "service": "lensmark-api",
+        "endpoints": ["/api/register", "/api/login", "/favicon.ico"],
+    }
+
+@app.post("/api/register")
+def register(creds: Credentials):
+    username = creds.username.strip()
+    password = creds.password
+    if not username or not password:
+        raise HTTPException(status_code=400, detail="Username and password are required.")
+
+    conn = get_db()
+    cur = conn.execute("SELECT username FROM users WHERE username = ?", (username,))
+    if cur.fetchone():
+        conn.close()
+        raise HTTPException(status_code=400, detail="Username already exists.")
+
+    salt = secrets.token_hex(16)
+    pw_hash = hash_password(password, salt)
+    conn.execute(
+        "INSERT INTO users (username, password_hash, salt, created_at) VALUES (?, ?, ?, ?)",
+        (username, pw_hash, salt, datetime.utcnow().isoformat()),
+    )
+    conn.commit()
+    conn.close()
+    return {"ok": True, "message": "Registered successfully."}
+
+@app.post("/api/login")
+def login(creds: Credentials):
+    username = creds.username.strip()
+    password = creds.password
+    conn = get_db()
+    cur = conn.execute("SELECT password_hash, salt FROM users WHERE username = ?", (username,))
+    row = cur.fetchone()
+    conn.close()
+    if not row:
+        raise HTTPException(status_code=401, detail="Invalid username or password.")
+    expected = row["password_hash"]
+    salt = row["salt"]
+    if hash_password(password, salt) != expected:
+        raise HTTPException(status_code=401, detail="Invalid username or password.")
+    token = secrets.token_urlsafe(32)
+    return {"ok": True, "token": token}
+
+@app.get("/favicon.ico")
+def favicon():
+    png_base64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII="
+    png_bytes = base64.b64decode(png_base64)
+    return Response(content=png_bytes, media_type="image/png")
