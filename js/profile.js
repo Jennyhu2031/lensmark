@@ -49,13 +49,15 @@ function showProfile(user) {
 }
 
 function updateGenderButtonsUI(gender) {
+  console.log("Updating gender UI for:", gender);
   genderButtons.forEach(btn => {
-    if (btn.dataset.gender === gender) {
+    const isSelected = btn.dataset.gender === gender;
+    if (isSelected) {
       btn.classList.add('bg-primary', 'text-[#111816]', 'border-primary');
-      btn.classList.remove('bg-white/50', 'dark:bg-black/20');
+      btn.classList.remove('bg-white/50', 'dark:bg-black/20', 'border-stone-200', 'dark:border-stone-800');
     } else {
       btn.classList.remove('bg-primary', 'text-[#111816]', 'border-primary');
-      btn.classList.add('bg-white/50', 'dark:bg-black/20');
+      btn.classList.add('bg-white/50', 'dark:bg-black/20', 'border-stone-200', 'dark:border-stone-800');
     }
   });
 }
