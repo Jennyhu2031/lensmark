@@ -56,46 +56,65 @@
       </div>
 
       <div class="px-4 pt-4">
-        <div class="flex border-b border-stone-200 dark:border-stone-800 justify-between">
-          <button id="tab-login" class="flex-1 pb-[13px] pt-4 border-b-[3px] border-b-primary">
-            <p class="text-sm font-bold tracking-[0.015em] text-primary">Log In</p>
-          </button>
-          <button id="tab-register" class="flex-1 pb-[13px] pt-4 border-b-[3px] border-b-transparent">
-            <p class="text-sm font-bold tracking-[0.015em] text-stone-500 dark:text-stone-400">Sign Up</p>
-          </button>
-        </div>
+        <!-- Tabs removed -->
       </div>
 
-      <div class="p-4 space-y-4">
-        <form id="login-form" class="space-y-3">
+      <div id="auth-section" class="p-4 space-y-4">
+        <form id="auth-form" class="space-y-3">
           <label class="flex flex-col gap-1">
             <span class="text-sm text-stone-700 dark:text-stone-300">Username</span>
-            <input id="login-username" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="yourname" />
+            <input id="username" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="yourname" />
           </label>
           <label class="flex flex-col gap-1">
             <span class="text-sm text-stone-700 dark:text-stone-300">Password</span>
-            <input id="login-password" type="password" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="••••••••" />
+            <input id="password" type="password" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="••••••••" />
           </label>
-          <button type="submit" class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-[#111816] text-base font-bold active:scale-95 transition-transform">
-            Log In
-          </button>
-          <p id="login-message" class="text-sm text-stone-600 dark:text-stone-300"></p>
+          <div class="flex flex-col gap-3 pt-2">
+            <button id="login-btn" type="button" class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-[#111816] text-base font-bold active:scale-95 transition-transform">
+              Log In
+            </button>
+            <button id="signup-btn" type="button" class="flex h-12 w-full items-center justify-center rounded-xl bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-white text-base font-bold active:scale-95 transition-transform">
+              Sign Up
+            </button>
+          </div>
+          <p id="auth-message" class="text-sm text-stone-600 dark:text-stone-300 text-center min-h-[1.25rem]"></p>
         </form>
+      </div>
 
-        <form id="register-form" class="space-y-3" style="display:none">
-          <label class="flex flex-col gap-1">
-            <span class="text-sm text-stone-700 dark:text-stone-300">Username</span>
-            <input id="register-username" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="yourname" />
-          </label>
-          <label class="flex flex-col gap-1">
-            <span class="text-sm text-stone-700 dark:text-stone-300">Password</span>
-            <input id="register-password" type="password" class="rounded-xl border border-stone-300 dark:border-stone-700 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm px-4 py-3 text-stone-900 dark:text-white" placeholder="••••••••" />
-          </label>
-          <button type="submit" class="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-[#111816] text-base font-bold active:scale-95 transition-transform">
-            Sign Up
-          </button>
-          <p id="register-message" class="text-sm text-stone-600 dark:text-stone-300"></p>
-        </form>
+      <div id="profile-section" class="p-4 space-y-6 hidden">
+        <div class="flex flex-col items-center gap-4">
+          <div class="relative">
+            <div class="size-24 rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center overflow-hidden border-2 border-primary">
+              <span id="profile-avatar" class="material-symbols-outlined text-5xl text-stone-500">person</span>
+            </div>
+            <button class="absolute bottom-0 right-0 size-8 rounded-full bg-primary text-[#111816] flex items-center justify-center shadow-lg">
+              <span class="material-symbols-outlined text-sm">edit</span>
+            </button>
+          </div>
+          <div class="text-center">
+            <h3 id="display-username" class="text-2xl font-bold text-stone-900 dark:text-white">Username</h3>
+            <p id="display-gender" class="text-sm text-stone-500 dark:text-stone-400">Not set</p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <p class="text-sm font-bold text-stone-700 dark:text-stone-300 uppercase tracking-wider">Settings</p>
+          <div class="rounded-xl border border-stone-200 dark:border-stone-800 divide-y divide-stone-200 dark:divide-stone-800 overflow-hidden bg-white/50 dark:bg-black/20">
+            <button id="set-gender-btn" class="flex w-full items-center justify-between p-4 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-stone-500">wc</span>
+                <span class="text-base font-medium">Set Gender</span>
+              </div>
+              <span class="material-symbols-outlined text-stone-400">chevron_right</span>
+            </button>
+            <button id="logout-btn" class="flex w-full items-center justify-between p-4 hover:bg-red-500/10 transition-colors group">
+              <div class="flex items-center gap-3 text-red-500">
+                <span class="material-symbols-outlined">logout</span>
+                <span class="text-base font-medium">Log Out</span>
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="mt-auto p-4">

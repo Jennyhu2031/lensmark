@@ -1,79 +1,110 @@
 const API_BASE = 'http://localhost:8001';
 
-const tabLogin = document.getElementById('tab-login');
-const tabRegister = document.getElementById('tab-register');
-const loginForm = document.getElementById('login-form');
-const registerForm = document.getElementById('register-form');
-const loginMsg = document.getElementById('login-message');
-const registerMsg = document.getElementById('register-message');
+// Auth elements
+const authSection = document.getElementById('auth-section');
+const profileSection = document.getElementById('profile-section');
+const authForm = document.getElementById('auth-form');
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.getElementById('login-btn');
+const signupBtn = document.getElementById('signup-btn');
+const authMsg = document.getElementById('auth-message');
 
-tabLogin.addEventListener('click', () => {
-  tabLogin.classList.add('border-b-primary');
-  tabRegister.classList.remove('border-b-primary');
-  loginForm.style.display = '';
-  registerForm.style.display = 'none';
+// Profile elements
+const displayUsername = document.getElementById('display-username');
+const displayGender = document.getElementById('display-gender');
+const setGenderBtn = document.getElementById('set-gender-btn');
+const logoutBtn = document.getElementById('logout-btn');
+
+// Check login status on load
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    showProfile(user);
+  }
 });
 
-tabRegister.addEventListener('click', () => {
-  tabRegister.classList.add('border-b-primary');
-  tabLogin.classList.remove('border-b-primary');
-  registerForm.style.display = '';
-  loginForm.style.display = 'none';
-});
+function showProfile(user) {
+  authSection.classList.add('hidden');
+  profileSection.classList.remove('hidden');
+  displayUsername.textContent = user.username;
+  displayGender.textContent = user.gender || 'Not set';
+}
 
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  loginMsg.textContent = '';
-  const username = document.getElementById('login-username').value.trim();
-  const password = document.getElementById('login-password').value;
+function showAuth() {
+  authSection.classList.remove('hidden');
+  profileSection.classList.add('hidden');
+  localStorage.removeItem('user');
+}
+
+async function handleAuth(type) {
+  authMsg.textContent = '';
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value;
+
   if (!username || !password) {
-    loginMsg.textContent = 'Please enter username and password.';
+    authMsg.textContent = 'Please enter username and password.';
+    authMsg.className = 'text-sm text-red-500 text-center min-h-[1.25rem]';
     return;
   }
+
+  const endpoint = type === 'login' ? '/api/login' : '/api/register';
+
   try {
-    const res = await fetch(`${API_BASE}/api/login`, {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
+
     const data = await res.json().catch(() => ({}));
+
     if (res.ok) {
-      loginMsg.textContent = 'Logged in successfully.';
-      loginMsg.classList.remove('text-stone-600', 'dark:text-stone-300');
-      loginMsg.classList.add('text-primary');
+      if (type === 'register') {
+        // Auto login after register
+        await handleAuth('login');
+      } else {
+        localStorage.setItem('user', JSON.stringify(data));
+        showProfile(data);
+      }
     } else {
-      loginMsg.textContent = data?.detail || 'Login failed.';
+      authMsg.textContent = data?.detail || `${type === 'login' ? 'Login' : 'Signup'} failed.`;
+      authMsg.className = 'text-sm text-red-500 text-center min-h-[1.25rem]';
     }
   } catch (err) {
-    loginMsg.textContent = 'Network error. Is the server running on 8001?';
+    authMsg.textContent = 'Network error. Is the server running?';
+    authMsg.className = 'text-sm text-red-500 text-center min-h-[1.25rem]';
   }
-});
+}
 
-registerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  registerMsg.textContent = '';
-  const username = document.getElementById('register-username').value.trim();
-  const password = document.getElementById('register-password').value;
-  if (!username || !password) {
-    registerMsg.textContent = 'Please enter username and password.';
-    return;
-  }
-  try {
-    const res = await fetch(`${API_BASE}/api/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (res.ok) {
-      registerMsg.textContent = 'Account created. You can log in now.';
-      registerMsg.classList.remove('text-stone-600', 'dark:text-stone-300');
-      registerMsg.classList.add('text-primary');
-    } else {
-      registerMsg.textContent = data?.detail || 'Registration failed.';
+loginBtn.addEventListener('click', () => handleAuth('login'));
+signupBtn.addEventListener('click', () => handleAuth('signup'));
+
+logoutBtn.addEventListener('click', showAuth);
+
+setGenderBtn.addEventListener('click', async () => {
+  const currentGender = displayGender.textContent;
+  const newGender = prompt('Enter gender (Male/Female/Other):', currentGender === 'Not set' ? '' : currentGender);
+  
+  if (newGender !== null && newGender.trim() !== '') {
+    const user = JSON.parse(localStorage.getItem('user'));
+    try {
+      const res = await fetch(`${API_BASE}/api/user/update_gender`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user.username, gender: newGender.trim() }),
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        user.gender = data.gender;
+        localStorage.setItem('user', JSON.stringify(user));
+        displayGender.textContent = data.gender;
+      } else {
+        alert(data.detail || 'Failed to update gender.');
+      }
+    } catch (err) {
+      alert('Network error.');
     }
-  } catch (err) {
-    registerMsg.textContent = 'Network error. Is the server running on 8001?';
   }
 });
-

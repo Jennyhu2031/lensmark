@@ -41,51 +41,37 @@
       };
     </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27><text y=%2724%27 font-size=%2724%27>📷</text></svg>">
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        securityJsCode: "cd48954e6a6d723c78882a9d7ff295d1", // 请替换为您的安全密钥
+      };
+    </script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=11428ab1e683465f82eed72248cc37ce&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geolocation,AMap.Marker"></script>
   </head>
   <body class="font-display bg-background-light dark:bg-background-dark text-stone-900 dark:text-white">
     <div class="relative flex h-screen w-full flex-col overflow-hidden font-display group/design-root">
-      <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAsB8In8vhCTwlrM9KOnNY8BIY9H5iXtc05FzLD0DaD-S8ySKzZoZ9dW_h27aS5hbohCwBKbwm-O5dd-MDeHIOr7kotXlZ2TzCua2PxuyPVayhMDqtSORouOHC_zc0han-7tR5Ubh-3v7yCtzJ1Or5eGTCDRZD8JfhFNZiku3_VU_nJ1rttOmcVd7fRmMsL76-MgTqC1pSW_PttptXQq9yAKk_21QaDReO4SwV7snrwUb6NfRtiOxfYo9LiTaV5hLhbTuQ29QSCLsG9');"></div>
+      <div id="map-container" class="absolute inset-0"></div>
       <div class="absolute top-0 left-0 right-0 z-10 p-4 pt-16 flex flex-col gap-4">
         <label class="flex flex-col min-w-40 h-14 w-full">
           <div class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-lg">
             <div class="text-gray-500 dark:text-gray-400 flex border-none bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm items-center justify-center pl-4 rounded-l-xl border-r-0">
               <span class="material-symbols-outlined text-2xl">search</span>
             </div>
-            <input class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm focus:border-none h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search for a place or city" />
-            <div class="text-gray-500 dark:text-gray-400 flex border-none bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm items-center justify-center pr-4 rounded-r-xl border-l-0">
+            <input id="search-input" class="flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-gray-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm focus:border-none h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search for a place or city" />
+            <div id="search-btn" class="text-gray-500 dark:text-gray-400 flex border-none bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm items-center justify-center pr-4 rounded-r-xl border-l-0 cursor-pointer">
               <span class="material-symbols-outlined text-2xl">tune</span>
             </div>
           </div>
         </label>
       </div>
       <div class="absolute bottom-64 right-4 z-10">
-        <button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 w-14 bg-primary text-[#111816] shadow-lg transition-transform active:scale-95">
+        <button id="locate-btn" class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 w-14 bg-primary text-[#111816] shadow-lg transition-transform active:scale-95">
           <span class="material-symbols-outlined text-2xl">my_location</span>
         </button>
       </div>
       <div class="absolute bottom-0 left-0 right-0 z-10 w-full pb-20">
-        <div class="flex overflow-y-auto no-scrollbar pb-4 px-4 gap-3">
-          <a href="detail.html" class="flex h-full flex-col gap-3 rounded-xl min-w-[240px] w-[240px] shrink-0 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm p-3 shadow-lg cursor-pointer transition-transform hover:scale-[1.02]">
-            <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD3tzlVswrxw3W1V2VdU6GmiE-tV4rmPdtEcz5C-8L1DelsrqlV5TdKfJXwLd8bVAS2EDe_lPDMh54LboAOiMDJ7_Y84-uhrzlQiyALHaaFuE1qm45hBfRcM-FNklAet_33IR95vN9Ox_z6wS44jlF8WRUlIHzeqKy-GaGOJbnYsneSSiOZVs3bp98YBkPG7PHaoqq7YAVSEBhf2XqSz2Nu1RyZHngbmCRBt3fFsdeM-64xGzus5LR7KG4L5NiROWjLB6qxE4zCLV-s');"></div>
-            <div>
-              <p class="text-gray-900 dark:text-white text-base font-bold leading-normal">Eiffel Tower</p>
-              <p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">1.2 mi away</p>
-            </div>
-          </a>
-          <div class="flex h-full flex-col gap-3 rounded-xl min-w-[240px] w-[240px] shrink-0 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm p-3 shadow-lg cursor-pointer transition-transform hover:scale-[1.02]">
-            <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAkfQCOtvl6lMA98xdrpeyedpRLlhmJyilt7Z0iBudKyq7rCenpOqoLEdpOapQB3horvxwfRUErliefdLhNNCWi9_ANdJDMZng99b8YEerlBtmaVFUPrqPe9oGZBBYt5r4tmsqGWvcAg_v5Y1MNiVojaw_8yAL58XWLrl3VkkeBYHZxkQPxJDu49hbi-bwAZc-iQ97JQOOP7A2omRwfffUiZmNbzoppXcm1w-5mLnLkZm9qGTu3QKxKw71e-6yRM_-_cSFveC4JxjjF');"></div>
-            <div>
-              <p class="text-gray-900 dark:text-white text-base font-bold leading-normal">Golden Gate Bridge</p>
-              <p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">3.5 mi away</p>
-            </div>
-          </div>
-          <div class="flex h-full flex-col gap-3 rounded-xl min-w-[240px] w-[240px] shrink-0 bg-white/80 dark:bg-[#1c2724]/80 backdrop-blur-sm p-3 shadow-lg cursor-pointer transition-transform hover:scale-[1.02]">
-            <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex flex-col" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWckcSUy-JiguJCZk8lfjh77PEXsG_XDjyZGXmMUdUySywoJbDZlgtHsaYhmH3SPfvPCwiRxSKWUOs8hMjyN08r3T-c1VB53UMK_9DWac0BkiEGTkt_Vz9qRmXkt8ghwPczCSucsSgVYoX65Kj_etz_N76F4LHNFGjBxS88fh6KYuxIYEYxoqHaqETeOAFMicTqOj3bMhlEtCXALFUnwDd9HMdVEYnpvxYLZ2UKUKBvv9rdHo1AJddrjKcllTUupkUy_SF28d05baS');"></div>
-            <div>
-              <p class="text-gray-900 dark:text-white text-base font-bold leading-normal">Colosseum</p>
-              <p class="text-gray-600 dark:text-gray-400 text-sm font-normal leading-normal">8.1 mi away</p>
-            </div>
-          </div>
+        <div id="attractions-list" class="flex overflow-y-auto no-scrollbar pb-4 px-4 gap-3">
+          <!-- 动态加载景点卡片 -->
         </div>
       </div>
       <div class="absolute bottom-0 left-0 right-0 z-20">
