@@ -41,6 +41,12 @@
       };
     </script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32  32%27><text y=%2724%27 font-size=%2724%27>📷</text></svg>">
+    <script type="text/javascript">
+      window._AMapSecurityConfig = {
+        securityJsCode: "cd48954e6a6d723c78882a9d7ff295d1",
+      };
+    </script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=11428ab1e683465f82eed72248cc37ce&plugin=AMap.PlaceSearch"></script>
   </head>
   <body class="font-display bg-background-light dark:bg-background-dark text-stone-900 dark:text-white">
     <div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden font-display">
@@ -48,7 +54,7 @@
         <a href="explore.html" class="flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
           <span class="material-symbols-outlined text-stone-900 dark:text-white">arrow_back</span>
         </a>
-        <h2 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-stone-900 dark:text-white">Eiffel Tower</h2>
+        <h2 id="header-title" class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-stone-900 dark:text-white">Loading...</h2>
         <div class="flex w-12 items-center justify-end">
           <button class="flex h-12 max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-transparent p-0 text-stone-900 dark:text-white">
             <span class="material-symbols-outlined">favorite_border</span>
@@ -56,18 +62,15 @@
         </div>
       </div>
       <div class="px-4 py-3">
-        <div class="w-full min-h-80 bg-cover bg-center bg-no-repeat flex flex-col justify-end overflow-hidden rounded-xl shadow-lg" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBum31FszUP6jx5NKSTAUYp-rD-XwxUPKQSbMIdlHhRkFcfO7eQPHnrkPTenBZOMnqh3RBgJKe0zmfVQRLyUlh8ddNvkP4FFUsI5i9bVbqK6yj7CWvZtC3H_S-1SukrBWVQ5pu50lhUoNX30POiLDb8Nw8i4CsMcFSjN7qlps4ZSGywa9OpOnnRqKXvOdw8qaiWC2PaWhQtJHt0A8CAfaM5y7gDFs3ywrgQlbuDOPyQ2_E7fpZjytHuBu1TaTJGYwGUxkn_4K_nLELs');"></div>
+        <div id="main-image" class="w-full min-h-80 bg-cover bg-center bg-no-repeat flex flex-col justify-end overflow-hidden rounded-xl shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80');"></div>
       </div>
-      <h1 class="text-stone-900 dark:text-white tracking-light text-[32px] font-bold leading-tight px-4 pb-3 pt-4">Eiffel Tower</h1>
+      <h1 id="main-title" class="text-stone-900 dark:text-white tracking-light text-[32px] font-bold leading-tight px-4 pb-1 pt-4">Loading...</h1>
+      <p id="poi-address" class="px-4 pb-1 text-stone-500 dark:text-stone-400 text-sm font-medium leading-normal">Fetching address...</p>
+      <p id="poi-description" class="px-4 pb-3 text-stone-600 dark:text-stone-400 text-sm leading-relaxed">Loading attraction details...</p>
+      
       <div class="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
-        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 pl-4 pr-4">
-          <p class="text-primary text-sm font-medium leading-normal">Architecture</p>
-        </div>
-        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 pl-4 pr-4">
-          <p class="text-primary text-sm font-medium leading-normal">Cityscape</p>
-        </div>
-        <div class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 pl-4 pr-4">
-          <p class="text-primary text-sm font-medium leading-normal">Iconic</p>
+        <div id="poi-type" class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary/20 pl-4 pr-4">
+          <p class="text-primary text-sm font-medium leading-normal">Tourist Attraction</p>
         </div>
       </div>
       <div class="sticky top-14 bg-background-light dark:bg-background-dark z-10 pt-2">
